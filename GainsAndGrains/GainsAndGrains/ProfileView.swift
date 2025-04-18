@@ -14,7 +14,6 @@ struct UserProfile: Codable, Identifiable {
     var dietaryPreference: String
     var activityLevel: String
     var mealsPerDay: Int
-    var sleepHours: Double
 
     static let `default` = UserProfile(
         age: 25,
@@ -24,8 +23,7 @@ struct UserProfile: Codable, Identifiable {
         fitnessGoal: "Lose weight",
         dietaryPreference: "None",
         activityLevel: "Sedentary",
-        mealsPerDay: 3,
-        sleepHours: 8
+        mealsPerDay: 3
     )
 }
 
@@ -62,6 +60,7 @@ class ProfileViewModel: ObservableObject {
 
 // MARK: - Profile View
 struct ProfileView: View {
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: ProfileViewModel
 
     var body: some View {
@@ -79,7 +78,6 @@ struct ProfileView: View {
                     Text("Diet: \(viewModel.profile.dietaryPreference)")
                     Text("Activity: \(viewModel.profile.activityLevel)")
                     Text("Meals/Day: \(viewModel.profile.mealsPerDay)")
-                    Text("Sleep: \(String(format: "%.1f", viewModel.profile.sleepHours)) hrs")
                 }
 
                 Section {
@@ -89,14 +87,16 @@ struct ProfileView: View {
                     Button("Log Out", role: .cancel) {
                         // Handle logout logic here
                         print("Logged out")
+                        dismiss()
                     }
                     Button("Delete Account", role: .destructive) {
                         viewModel.resetProfile()
+                        dismiss()
                     }
                 }
             }
-            .navigationTitle("Your Profile")
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -120,7 +120,6 @@ struct EditProfileView: View {
                     ForEach(["Sedentary", "Lightly active", "Moderately active", "Very active"], id: \ .self) { Text($0) }
                 }
                 Stepper("Meals per day: \(viewModel.profile.mealsPerDay)", value: $viewModel.profile.mealsPerDay, in: 1...10)
-                Stepper("Sleep hours: \(String(format: "%.1f", viewModel.profile.sleepHours))", value: $viewModel.profile.sleepHours, in: 3...12, step: 0.5)
             }
         }
         .navigationTitle("Edit Profile")
