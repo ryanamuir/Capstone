@@ -18,16 +18,18 @@ struct OnboardingView: View {
     // MARK: - Page 2: Goals & Lifestyle
     @State private var fitnessGoal = "Lose weight"
     private let goals = ["Lose weight", "Build muscle", "Improve endurance", "General fitness"]
+    
+    @State private var activityLevel = "Sedentary"
+    private let activityLevels = ["Sedentary", "Lightly active", "Moderately active", "Very active"]
+    
+    @State private var equipmentAccess = "None"
+    private let equipmentAccesses = ["None", "Weights", "Machines", "Weights and Machines"]
 
     @State private var dietaryPreference = "None"
     private let dietaryOptions = ["None", "Vegetarian", "Vegan", "Gluten-Free", "Keto", "Paleo"]
 
-    @State private var activityLevel = "Sedentary"
-    private let activityLevels = ["Sedentary", "Lightly active", "Moderately active", "Very active"]
-
     @State private var meals = 3
-    @State private var sleepHours = 8.0
-    private let sleepRange = stride(from: 3.0, through: 12.0, by: 0.5).map { Double($0) }
+    
 
     var body: some View {
         ZStack {
@@ -40,7 +42,7 @@ struct OnboardingView: View {
                 Image("Logo")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 120, height: 70)
+                    .frame(width: 120, height: 50)
 
                 TabView(selection: $currentPage) {
 
@@ -117,7 +119,7 @@ struct OnboardingView: View {
 
                     // MARK: - Page 2
                     ScrollView {
-                        VStack(alignment: .leading, spacing: 20) {
+                        VStack(alignment: .leading, spacing: 25) {
                             Text("Your Goals & Lifestyle")
                                 .font(.title2)
                                 .foregroundColor(.white)
@@ -127,18 +129,6 @@ struct OnboardingView: View {
                                     .foregroundColor(.white)
                                 Picker("Fitness Goal", selection: $fitnessGoal) {
                                     ForEach(goals, id: \.self) { Text($0).tag($0) }
-                                }
-                                .pickerStyle(MenuPickerStyle())
-                                .padding(.horizontal)
-                                .background(Color.white.opacity(0.1))
-                                .cornerRadius(8)
-                            }
-
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Dietary Preference")
-                                    .foregroundColor(.white)
-                                Picker("Dietary Preference", selection: $dietaryPreference) {
-                                    ForEach(dietaryOptions, id: \.self) { Text($0).tag($0) }
                                 }
                                 .pickerStyle(MenuPickerStyle())
                                 .padding(.horizontal)
@@ -157,6 +147,32 @@ struct OnboardingView: View {
                                 .background(Color.white.opacity(0.1))
                                 .cornerRadius(8)
                             }
+                            
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Access to Gym Equipment")
+                                    .foregroundColor(.white)
+                                Picker("Equipment", selection: $equipmentAccess) {
+                                    ForEach(equipmentAccesses, id: \.self) {
+                                        Text($0).tag($0)
+                                    }
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                .padding(.horizontal)
+                                .background(Color.white.opacity(0.1))
+                                .cornerRadius(8)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Dietary Preference")
+                                    .foregroundColor(.white)
+                                Picker("Dietary Preference", selection: $dietaryPreference) {
+                                    ForEach(dietaryOptions, id: \.self) { Text($0).tag($0) }
+                                }
+                                .pickerStyle(MenuPickerStyle())
+                                .padding(.horizontal)
+                                .background(Color.white.opacity(0.1))
+                                .cornerRadius(8)
+                            }
 
                             VStack(alignment: .leading, spacing: 0) {
                                 Text("Meals per day")
@@ -167,18 +183,6 @@ struct OnboardingView: View {
                                 .pickerStyle(WheelPickerStyle())
                                 .frame(height: 100)
                             }
-
-                            /*VStack(alignment: .leading, spacing: 0) {
-                                Text("Hours of Sleep")
-                                    .foregroundColor(.white)
-                                Picker("Sleep", selection: $sleepHours) {
-                                    ForEach(sleepRange, id: \.self) {
-                                        Text("\(String(format: "%.1f", $0)) hrs").tag($0)
-                                    }
-                                }
-                                .pickerStyle(WheelPickerStyle())
-                                .frame(height: 100)
-                            }*/
 
                             Spacer()
 
@@ -228,10 +232,10 @@ struct OnboardingView: View {
         print("Height: \(height) cm")
         print("Weight: \(weight) kg")
         print("Fitness Goal: \(fitnessGoal)")
-        print("Dietary Preference: \(dietaryPreference)")
         print("Activity Level: \(activityLevel)")
+        print("Equipment Access: \(equipmentAccess)")
+        print("Dietary Preference: \(dietaryPreference)")
         print("Meals per Day: \(meals)")
-        print("Hours of Sleep: \(sleepHours)")
     }
 }
 
